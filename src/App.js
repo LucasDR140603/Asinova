@@ -69,7 +69,7 @@ function App() {
     setSubShow(!subshow)
   }
   return (
-    <div className="App" style={{backgroundPositionX:`-${scroll/2}px`}}>
+    <div className="App">
       <header>
         <div className='round-links-icon' ref={linksicon} onClick={()=>{setShow(!show)}}>
           <div></div>
