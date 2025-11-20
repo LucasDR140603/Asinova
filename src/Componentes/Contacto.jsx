@@ -56,14 +56,14 @@ export default function({}){
                 </div>
             </div>
             <div style={{flex:'1',width:'100%'}}>
-                <div style={{display:'flex',flexDirection:'column',gap:'1rem',width:'min-content',margin:'0 auto'}}>
-                    <h1 style={{textAlign:'center',marginBottom:0}}>{idioma=="en"?"CONTACT":"CONTACTO"}</h1>
+                <div style={{border:'1px solid azure',display:'flex',backgroundColor:'#212121',maxWidth:'100%',boxSizing:'border-box',padding:'1rem',flexDirection:'column',gap:'1rem',width:'min-content',margin:'0 auto'}}>
+                    <h1 style={{textAlign:'center',margin:0}}>{idioma=="en"?"CONTACT":"CONTACTO"}</h1>
                     {campos.map((x,i)=>(
                     i<campos.length-1?
                     <input className={error && x.replaceAll(" ","").length==0 && placeholders[i].includes("*")?"error":""} type="text" value={x} placeholder={placeholders[i]} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
                     :<textarea className={error && x.replaceAll(" ","").length==0?"error":""} placeholder={placeholders[i]} value={x} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
                     ))}
-                    <a className="btn" style={{width:'fit-content',margin:'0 auto'}} onClick={enviar}>{idioma=="en"?"Send":"Enviar"}</a>
+                    <a className="btn" style={{width:'fit-content',margin:'0 auto',backgroundColor:'#242629'}} onClick={enviar}>{idioma=="en"?"Send":"Enviar"}</a>
                     {error?
                     <p style={{color:'red',textAlign:'center'}}><b>ERROR</b></p>
                     :acierto?
