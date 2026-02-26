@@ -46,6 +46,14 @@ export default function({}){
             </ul>
             <hr/>
             <h2>{idioma=="en"?"RECENT PROJECTS":"PROYECTOS RECIENTES"}</h2>
+            <p>{parse(idioma=='en'?"Development of automation and control of the <a className='verde' href='https://cogersa.es'>Cogersa</a> <span>waste treatment plant</span> in Asturias, giving operators complete control at their fingertips, improving efficiency and responsiveness. We have implemented a comprehensive solution using <span>Siemens TIA Portal</span> for programming:":"Desarrollo de la automatización y control de la <span>planta de tratamiento de residuos</span> de <a className='verde' href='https://cogersa.es'>Cogersa</a> en Asturias, dándole a los operarios el control total en la palma de su mano, mejorando la eficiencia y la respuesta en planta. Hemos implementado una solución integral utilizando <span>Siemens TIA Portal</span> para la programación de:")}</p>
+            <ul>
+                <li>PLC S71500</li>
+                <li>SCADA WinCC Unified</li>
+                <li>Tablets</li>
+            </ul>
+            <iframe style={{display:'block', margin:'0 auto',width:'50vw',height:'40vw'}} src="https://www.youtube.com/embed/5SeKGC9FIoY?si=6wiapg-0Vak-IBac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <br></br>
             <p>{parse(idioma=="en"?"PLC+SCADA+HMI+Production Control Application programming for the new <a className='verde' href='https://www.sogama.gal/es'>Sogama</a> plant in Galicia, managed by <a className='verde' href='https://valtalia.com/web/'>Valtalia</a> in Galicia, for the <span>treatment, classification and recovery of materials from urban solid waste (MSW).</span>":"Programación PLC+SCADA+HMI+Aplicación de Control de Producción de nueva planta de <a className='verde' href='https://www.sogama.gal/es'>Sogama</a>, gestionada por <a className='verde' href='https://valtalia.com/web/'>Valtalia</a> en Galicia, de <span>Tratamiento, Clasificación y Recuperación de materiales procedentes de Residuo Sólido Urbano (RSU).</span>")}</p>
             <ul>
                 <li>{parse(idioma=="en"?"Local Control via <span>Tablets</span>":"Mando Local mediante <span>Tablets</span>")}</li>

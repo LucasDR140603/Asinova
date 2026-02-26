@@ -1,44 +1,54 @@
-import { useState,useEffect } from "react"
+import { MdArrowLeft,MdArrowRight } from "react-icons/md";
+import { useState,useEffect } from "react";
 export default function({imagenes}){
+    const [index,setIndex]=useState(0)
+    const anterior=index==0?imagenes.length-1:index-1
+    const posterior=index==imagenes.length-1?0:index+1
+    const delay=(milliseconds)=>new Promise(resolve=>setTimeout(resolve,milliseconds))
     const [izquierda,setIzquierda]=useState(false)
     const [derecha,setDerecha]=useState(false)
-    const [index,setIndex]=useState(0)
-    const duration=500
+    
+    
     const [alto,setAlto]=useState(0)
     const [ancho,setAncho]=useState(0)
-    const anterior=()=>{
-        return index==0?imagenes.length-1:index-1;
-    }
-    const posterior=()=>{
-        return index==imagenes.length-1?0:index+1;
-    }
-    const delay=(milliseconds)=>new Promise(resolve=>setTimeout(resolve,milliseconds))
     useEffect(()=>{
-        const cargarDimensiones = async () => {
-            const dimensiones = await Promise.all(
-                imagenes.map(src => {
-                    return new Promise(resolve => {
-                    const img = new Image();
-                    img.onload = () => resolve({ alto: img.height, ancho: img.width });
-                    img.src = src;
-                    });
-                }
+        const cargarDimensiones=async()=>{
+            const dimensiones=await Promise.all(
+                imagenes.map(src=>{
+                    return new Promise(resolve=>{
+                        const img=new Image()
+                        img.onload=()=>resolve({alto:img.height,ancho:img.width})
+                        img.src=src
+                    })
+                })
             )
-        )
-        setAlto(Math.max(...dimensiones.map((x)=>x.alto)))
-        setAncho(Math.max(...dimensiones.map((x)=>x.ancho)))
-        };
-        cargarDimensiones();
+            setAlto(Math.max(...dimensiones.map((x)=>x.alto)))
+            setAncho(Math.max(...dimensiones.map((x)=>x.ancho)))
+        }
+        cargarDimensiones()
     },[imagenes])
-    return(
-        <div className="flex vcenter" style={{gap:'1rem',maxWidth:'100%',margin:'0 auto',justifyContent:'center'}}>
-            <a className="btn" style={{padding:'0.5rem 0.75rem'}} onClick={async()=>{setIzquierda(true);await delay(duration+25);setIndex(anterior());setIzquierda(false)}}>◄</a>
-            <div style={{maxWidth:'100%',overflow:'hidden',position:'relative',width:`${ancho}px`,aspectRatio:`${ancho}/${alto}`,display:'grid',placeContent:'center'}}>
-                <img src={imagenes[index]} style={{maxWidth:'100%',maxHeight:'100%',boxSizing:'border-box',position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',animationName:izquierda?'centro-derecha':derecha?'centro-izquierda':'',animationDuration:`${duration}ms`,animationFillMode:'forwards'}}/>
+    useEffect(()=>{
+        if (!izquierda && alto>0 && ancho>0){
+            setIndex(anterior);
+        }
+    },[izquierda])
+    useEffect(()=>{
+        if (!derecha && alto>0 && ancho>0){
+            setIndex(posterior);
+        }
+    },[derecha])
+    const duracion=500
+    const resto=-25
+    return (
+        <div className="carrusel">
+            <a className="btn" onClick={async()=>{setIzquierda(true);await delay(duracion+resto);setIzquierda(false);}}><MdArrowLeft size={'7vmin'}/></a>
+            <div style={{maxWidth:'100%',overflow:'hidden',position:'relative',width:`${ancho}px`,aspectRatio:`${ancho}/${alto}`}}>
+                <img src={imagenes[index]} style={{maxWidth:'100%',maxHeight:'100%',position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',animation:`${(izquierda || derecha)?'centro-'+(izquierda?'derecha':'izquierda'):''} ${duracion}ms forwards`}}/>
                 {izquierda || derecha?
-                <img src={imagenes[izquierda?anterior():posterior()]} style={{maxWidth:'100%',maxHeight:'100%',boxSizing:'border-box',position: 'absolute',top: '50%',left: '50%',transform: 'translate(-50%, -50%)',animationName:`${izquierda?'izquierda':'derecha'}-centro`,animationDuration:`${duration}ms`,animationFillMode:'forwards'}}/>
+                <img src={imagenes[izquierda?anterior:posterior]} style={{maxWidth:'100%',maxHeight:'100%',position: 'absolute',top: '50%',transform: 'translate(-50%, -50%)',animation:`${izquierda?'izquierda':'derecha'}-centro ${duracion}ms forwards`}}/>
                 :null}
             </div>
-            <a className="btn" style={{padding:'0.5rem 0.75rem'}} onClick={async()=>{setDerecha(true);await delay(duration+25);setIndex(posterior());setDerecha(false)}}>►</a>
-        </div>)
+            <a className="btn" onClick={async()=>{setDerecha(true);await delay(duracion+resto);setDerecha(false);}}><MdArrowRight size={'7vmin'}/></a>
+        </div>
+    )
 }

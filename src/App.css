@@ -19,9 +19,6 @@
     flex-direction: column;
   }
 }
-.lpshorizontal{
-  border-radius: 10px;
-}
 @media (max-width:1099.99px){
   .flex.min1100{
     flex-direction: column;
@@ -42,13 +39,6 @@
   .col-imgs p{
     text-align: center;
   }
-}
-@media(min-width:900px){
-  .lpshorizontal img{
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  
 }
 
 @media (max-width:999.99px){
@@ -217,6 +207,7 @@ hr{
   display: block;
   margin:0 auto;
   width: 30vw;
+  height: 30vw;
 }
 .round-links-icon{
   display: none;
@@ -289,12 +280,25 @@ hr{
 .logo-titulo img{
   height: 6vw;
 }
-.enlace,.marcado,.btn{
+.enlace,.marcado,.btn:not(.carrusel .btn){
   min-width: fit-content;
   height: fit-content;
   padding: 0.5rem 1rem;
   border-radius: 30px;
   box-shadow: 0 0 0 0.11rem black, 0 0 0 0.22rem azure;
+}
+.carrusel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1rem
+}
+.carrusel .btn{
+  border-radius: 50%;
+  line-height: 0;
+  border:1px solid black;
+  outline:2px solid black;
+  box-shadow: 0 0 0 0.22rem azure;
 }
 .enlace{
   color: azure;
@@ -307,9 +311,12 @@ a{
 .enlace:hover{
   background-image: linear-gradient(goldenrod,black,goldenrod);
 }
-.enlace:active,.marcado:active,.btn:active{
+.enlace:active,.marcado:active,.btn:active:not(.carrusel .btn){
   outline:1.5px solid azure;
   box-shadow: 0 0 0 0.15rem black, 0 0 0 0.25rem azure;
+}
+.carrusel .btn:active{
+  border-color: azure;
 }
 .enlace,.btn{
   background-color: #181818;
@@ -344,36 +351,36 @@ span{
   display: block;
   margin: 0 auto;
 }
-@keyframes izquierda-centro {
+@keyframes centro-izquierda {
   from{
-    transform: translate(-100vw,-50%);
+    left:50%
   }
   to{
-    transform: translate(-50%,-50%);
+    left: -50%;
   }
 }
-@keyframes derecha-centro{
+@keyframes centro-derecha {
   from{
-    transform: translate(100vw,-50%);
+    left:50%;
   }
   to{
-    transform: translate(-50%,-50%);
+    left: 150%;
   }
 }
-@keyframes centro-izquierda{
+@keyframes izquierda-centro{
   from{
-    transform: translate(-50%,-50%);
+    left:-100%;
   }
   to{
-    transform: translate(-100vw,-50%);
+    left:50%;
   }
 }
-@keyframes centro-derecha{
+@keyframes derecha-centro {
   from{
-    transform: translate(-50%,-50%);
+    left:150%;
   }
   to{
-    transform: translate(100vw,-50%);
+    left:50%;
   }
 }
 @keyframes popup{
@@ -422,9 +429,10 @@ input:focus.error{
   background-color:#212121;
   border:1px solid azure;
   box-sizing: border-box;
+  position:relative;
+  border-radius: 10px;
 }
 .lps{
-  border-radius:10px;
   box-shadow: 0 0 6px 0px azure;
   padding:1rem;
   transition: scale 0.125s ease-out;
@@ -432,6 +440,7 @@ input:focus.error{
 .lpshorizontal{
   box-shadow: 0 0 3px 1px azure;
   transition:scale 0.125s ease-out;
+  overflow: hidden;
 }
 .lps h2{
   margin: 0;
@@ -444,6 +453,6 @@ input:focus.error{
 
 .lpshorizontal:hover{
   scale: 1.025;
-  box-shadow: 0 0 5px 2px azure;
+  box-shadow: 0 0 7px 2px azure;
   transition-duration: 0.25s;
 }
