@@ -16,9 +16,9 @@ import AUT from "./Componentes/AUT"
 import Mapa from './Componentes/Mapa';
 import NoEncontrado from './Componentes/NoEncontrado';
 function App() {
+  const appref=useRef()
   const [scroll,setScroll]=useState(0)
   const [idioma,setIdioma]=useState(Cookies.get("idioma")||"es")
-  const mainRef=useRef()
   const linksicon=useRef()
   const idiomas=["es","en"]
   const [show,setShow]=useState(false)
@@ -36,8 +36,8 @@ function App() {
     Cookies.set("idioma",str)
   }
   useEffect(()=>{
-    if (mainRef.current){
-      mainRef.current.scrollTo(0, 0)
+    if (appref.current){
+      appref.current.scrollTo(0,0)
     }
     setShow(false)
     setSubShow(false)
@@ -57,36 +57,31 @@ function App() {
     }
   }
   useEffect(()=>{
-    const handleScroll=()=>{
-      setScroll(mainRef.current.scrollTop)
-    }
-    mainRef.current.addEventListener("scroll",handleScroll)
-    return ()=>{
-      mainRef.current.removeEventListener("scroll",handleScroll)
-    }
+    
   },[])
   const onSubClick=()=>{
     setSubShow(!subshow)
   }
   return (
-    <div className="App">
-      <header>
-        <div className='round-links-icon' ref={linksicon} onClick={()=>{setShow(!show)}}>
-          <div></div>
-          <div></div>
-          <div></div>
+    <div className="App" ref={appref}>
+      <header style={{boxShadow:show?'none':''}}>
+        <div className='headercontainer' style={{borderBottom:show?'1px solid azure':'none'}}>
+          <div className='round-links-icon' ref={linksicon} onClick={()=>{setShow(!show)}}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div className='enlaces'>
+            {enlaces.map((x,i)=>(
+              <Link to={'/'+url(x)} className={reemplazarAcentos(location).includes(url(x)) || (i==0 && location.length==0)?'marcado':'enlace'}>{(idioma=="en"?enlaces_en[i]:x).toUpperCase()}</Link>
+            ))}
+          </div>
+          <div className='flex vcenter banderas'>
+            {idiomas.map((x,i)=>(<img key={i} src={banderas[i]} className="bandera" onClick={()=>{Idioma(x)}} style={{boxShadow:idioma==x?"0 0 0 0.1rem black, 0 0 0 0.22rem white":"none"}}/>))}
+            <Link to={'/'} style={{lineHeight:0}}><img src={logo} className="logo"/></Link>
+          </div>
         </div>
-        <div className='enlaces'>
-          {enlaces.map((x,i)=>(
-            <Link to={'/'+url(x)} className={reemplazarAcentos(location).includes(url(x)) || (i==0 && location.length==0)?'marcado':'enlace'}>{(idioma=="en"?enlaces_en[i]:x).toUpperCase()}</Link>
-          ))}
-        </div>
-        <div className='flex vcenter banderas'>
-          {idiomas.map((x,i)=>(<img key={i} src={banderas[i]} className="bandera" onClick={()=>{Idioma(x)}} style={{boxShadow:idioma==x?"0 0 0 0.1rem black, 0 0 0 0.22rem white":"none"}}/>))}
-          <Link to={'/'} style={{lineHeight:0}}><img src={logo} className="logo"/></Link>
-        </div>
-      </header>
-      {show?
+        {show?
         <div className='linkbox'>
           {enlaces.map((x,i)=>(
             <div><Link className={reemplazarAcentos(location).includes(url(x)) || (i==0 && location.length==0)?'pulsado':''} style={{width:'100%'}} to={'/'+url(x)}>{idioma=="en"?enlaces_en[i]:x}</Link>
@@ -104,11 +99,12 @@ function App() {
             </div>
           ))}
         </div>:null}
-      <main ref={mainRef}>
+      </header>
+      <main>
         <div className='content'>
           <div className="logo-titulo">
             <img src={logo} className="logo"/>
-            <h1>INDUSTRIAL SOFTWARE & AUTOMATION</h1>
+            <h1 className='subtitulo'>INDUSTRIAL SOFTWARE & AUTOMATION</h1>
           </div>
           <Routes>
             <Route path={'/'+url(enlaces[0])} element={<Navigate to={'/'}/>}/>

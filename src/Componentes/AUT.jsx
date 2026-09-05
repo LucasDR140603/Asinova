@@ -53,7 +53,7 @@ export default function({}){
                 <li>Tablets</li>
             </ul>
             <iframe style={{display:'block', margin:'0 auto',width:'50vw',height:'40vw'}} src="https://www.youtube.com/embed/5SeKGC9FIoY?si=6wiapg-0Vak-IBac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            <br></br>
+            <br/><hr/><br/>
             <p>{parse(idioma=="en"?"PLC+SCADA+HMI+Production Control Application programming for the new <a className='verde' href='https://www.sogama.gal/es'>Sogama</a> plant in Galicia, managed by <a className='verde' href='https://valtalia.com/web/'>Valtalia</a> in Galicia, for the <span>treatment, classification and recovery of materials from urban solid waste (MSW).</span>":"Programación PLC+SCADA+HMI+Aplicación de Control de Producción de nueva planta de <a className='verde' href='https://www.sogama.gal/es'>Sogama</a>, gestionada por <a className='verde' href='https://valtalia.com/web/'>Valtalia</a> en Galicia, de <span>Tratamiento, Clasificación y Recuperación de materiales procedentes de Residuo Sólido Urbano (RSU).</span>")}</p>
             <ul>
                 <li>{parse(idioma=="en"?"Local Control via <span>Tablets</span>":"Mando Local mediante <span>Tablets</span>")}</li>
@@ -66,7 +66,7 @@ export default function({}){
                 <li>{parse(idioma=="en"?"<span>Gateways</span> for communication with other equipment and PLCs: <span>ModBus TCP/RTU, <a className='gold subrayado' href='https://us.profinet.com/technology/profinet/'>ProfiNet</a></span>":"<span>Gateways</span> para comunicación con otros equipos y PLCs: <span>ModBus TCP/RTU, <a className='gold subrayado' href='https://us.profinet.com/technology/profinet/'>ProfiNet</a></span>")}</li>
             </ul>
             <Carrusel imagenes={[carrusel4,carrusel5,carrusel1,carrusel2,carrusel3,carrusel16,carrusel17]}/>
-            <hr/>
+            <br/><hr/>
             <h2 style={{textAlign:'center'}}><span>{idioma=="en"?"Automation of industrial biomass boilers":"Automatización de calderas industriales de Biomasa"}</span></h2>
             <div className='flex min1100' style={{justifyContent:'space-around',margin:'0 auto'}}>
                 <img src={carrusel7} className='img-pagina' style={{display:'block',margin:'0 auto'}}/>

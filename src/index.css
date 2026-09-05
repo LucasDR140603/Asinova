@@ -6,11 +6,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: azure;
-  
+  background-image: linear-gradient(90deg,#08090d,#1e1e12,#1e1e12,#1e1e12,#08090d);
 }
 :root{
   color-scheme: dark;
-  --drop-shadow:1px
+  --drop-shadow:1px;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

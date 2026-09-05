@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react"
+import { useEffect,useRef,useState } from "react"
 import linkedin from '../Img/linkedin.png'
 import i1 from '../Img/I1.png'
 import fieldbus from '../Img/Fieldbus.png'
@@ -6,7 +6,10 @@ import piramide from '../Img/Piramide.png'
 import ReactHtmlParser from 'html-react-parser'
 import axios from "axios"
 import Cookies from "js-cookie"
+import Turnstile from "react-turnstile"
+import {ThreeDots} from 'react-loader-spinner'
 export default function({}){
+    const [token,setToken]=useState(null)
     const idioma=Cookies.get("idioma")||'es'
     const parse=ReactHtmlParser
     const [nombre,setNombre]=useState("")
@@ -17,24 +20,75 @@ export default function({}){
     const [acierto,setAcierto]=useState(false)
     const campos=[nombre,empresa,email,mensaje]
     const setsCampos=[setNombre,setEmpresa,setEmail,setMensaje]
+    const [enviando,setEnviando]=useState(false)
     const placeholders=idioma=="en"?["Name *","Company","Email *","Message *"]:["Nombre *","Empresa","Email *","Mensaje *"]
+    const refs=useRef([])
+    useEffect(()=>{
+        setAcierto(false)
+        const handleKeyDown=(e)=>{
+            if (e.key=='Enter' && document.activeElement!=refs.current[setsCampos.indexOf(setMensaje)]){
+                enviar()
+            }
+        }
+        window.addEventListener('keydown',handleKeyDown)
+        return()=>{
+            window.removeEventListener('keydown',handleKeyDown)
+        }
+    },[...campos,token])
+    useEffect(()=>{
+        const handleKeyDown=(e)=>{
+            if (['ArrowDown','ArrowUp'].includes(e.key)){
+                let abajo=e.key=='ArrowDown'
+                let indice_actual=refs.current.indexOf(document.activeElement)
+                let ultimo=campos.length-1
+                let sumador=abajo?indice_actual==ultimo?-indice_actual:1:indice_actual==0?ultimo:-1
+                let nuevo_indice=indice_actual+sumador
+                let elemento=refs.current[nuevo_indice]
+                let cursor_actual=refs.current[indice_actual].selectionStart
+                if (indice_actual!=setsCampos.indexOf(setMensaje) || !mensaje.includes('\n') || ((cursor_actual==mensaje.split('\n')[0].length && !abajo) || (cursor_actual==mensaje.length && abajo))){
+                    elemento.focus()
+                    if (nuevo_indice==setsCampos.indexOf(setMensaje)){
+                        e.preventDefault()
+                        let cursor=mensaje.length
+                        elemento.selectionStart = cursor;
+                        elemento.selectionEnd = cursor;
+                    }
+                }
+                else{
+                    
+                }
+            }
+        }
+        window.addEventListener('keydown',handleKeyDown)
+        return()=>{
+            window.removeEventListener('keydown',handleKeyDown)
+        }
+    },[mensaje])
     const enviar=()=>{
-        if (campos.filter(x=>x.replaceAll(" ","").length==0).length!=0){
+        if (campos.filter(x=>x.replaceAll(" ","").length==0).length!=0 || token==null){
             setError(true)
         }
         else{
+            setError(false)
+            setEnviando(true)
             const gmail={
                 para:"jorge.guinarte@asinova.es",
                 asunto:"Contacto",
-                mensaje:"Nombre: "+nombre+"\nEmpresa: "+empresa+"\nEmail: "+email+"\n"+mensaje
+                mensaje:"Nombre: "+nombre+"\nEmpresa: "+empresa+"\nEmail: "+email+"\n"+mensaje,
+                captchaToken:token
             }
-            axios.post('https://www.asinova.es/gmail',gmail).then(res=>{
+            axios.post('https://www.asinova.es/webapi/gmail',gmail).then(res=>{
                 if (res.data.mensaje=="Correo enviado correctamente"){
                     setAcierto(true)
                 }
                 else{
                     setError(true)
                 }
+                setEnviando(false)
+            }).catch((error)=>{
+                setEnviando(false)
+                setError(true)
+                setAcierto(false)
             })
         }
     }
@@ -56,19 +110,28 @@ export default function({}){
                 </div>
             </div>
             <div style={{flex:'1',width:'100%'}}>
-                <div style={{border:'1px solid azure',display:'flex',backgroundColor:'#212121',maxWidth:'100%',boxSizing:'border-box',padding:'1rem',flexDirection:'column',gap:'1rem',width:'min-content',margin:'0 auto'}}>
+                <div className="contacto">
+                    <div>
                     <h1 style={{textAlign:'center',margin:0}}>{idioma=="en"?"CONTACT":"CONTACTO"}</h1>
                     {campos.map((x,i)=>(
-                    i<campos.length-1?
-                    <input className={error && x.replaceAll(" ","").length==0 && placeholders[i].includes("*")?"error":""} type="text" value={x} placeholder={placeholders[i]} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
-                    :<textarea className={error && x.replaceAll(" ","").length==0?"error":""} placeholder={placeholders[i]} value={x} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
+                    i!=setsCampos.indexOf(setMensaje)?
+                    <input ref={(el)=>(refs.current[i]=el)} className={error && x.replaceAll(" ","").length==0 && placeholders[i].includes("*")?"error":""} type="text" value={x} placeholder={placeholders[i]} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
+                    :<textarea ref={(el)=>(refs.current[i]=el)} className={error && x.replaceAll(" ","").length==0?"error":""} placeholder={placeholders[i]} value={x} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
                     ))}
-                    <a className="btn" style={{width:'fit-content',margin:'0 auto',backgroundColor:'#242629'}} onClick={enviar}>{idioma=="en"?"Send":"Enviar"}</a>
+                    <Turnstile
+                        size='flexible'
+                        style={{width:'100%',boxSizing:'border-box'}}
+                        sitekey="0x4AAAAAACnQ4khv88uI5n97"
+                        language={idioma}
+                        onSuccess={(t)=>setToken(t)}
+                    />
+                    <a className={`btn ${enviando?'enviando':''}`} style={{width:'fit-content',margin:'0 auto',backgroundColor:'#242629',display:'flex',alignItems:'center',gap:'0.5rem'}} onClick={enviar}>{idioma=="en"?"Send":"Enviar".slice(0,enviando?-1:6)}{enviando?<>{idioma=='en'?'ing':'ndo'}{<ThreeDots width={"20"} height={"10"} color="azure"/>}</>:null}</a>
                     {error?
                     <p style={{color:'red',textAlign:'center'}}><b>ERROR</b></p>
                     :acierto?
                     <p style={{color:'aqua',textAlign:'center'}}><b>{idioma=="en"?"Email sent successfully":"Correo enviado correctamente"}</b></p>
                     :null}
+                    </div>
                 </div>
                 <p style={{marginTop:'1rem',textAlign:'center'}}>{idioma=="en"?"Address: ASINOVA SOLUTIONS, S.L. C/Amio, 114 Costavella Business Center - 15707 - Santiago de Compostela - A Coruña":"Dirección: ASINOVA SOLUCIONES, S.L. C/Amio, 114 CENTRO DE NEGOCIOS COSTAVELLA - 15707 - Santiago de Compostela - A CORUÑA"}</p>
                 <iframe style={{display:'block',width:'100%',margin:'0 auto'}} src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2922.7209941933666!2d-8.511116999999999!3d42.899833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDLCsDUzJzU5LjQiTiA4wrAzMCc0MC4wIlc!5e0!3m2!1ses!2ses!4v1737651598314!5m2!1ses!2ses" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
