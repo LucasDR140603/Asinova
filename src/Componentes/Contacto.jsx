@@ -8,6 +8,7 @@ import axios from "axios"
 import Cookies from "js-cookie"
 import Turnstile from "react-turnstile"
 import {ThreeDots} from 'react-loader-spinner'
+import {TextField,Card,CardHeader,CardContent,CardActions,Button,Alert} from '@mui/material'
 export default function({}){
     const [token,setToken]=useState(null)
     const idioma=Cookies.get("idioma")||'es'
@@ -109,15 +110,17 @@ export default function({}){
                     <p style={{fontSize:'0.9rem'}}>{idioma=="en"?"Integration with Traceability, MES and ERP Systems":"Integración con Trazabilidad, Sistemas MES y ERP"}</p>
                 </div>
             </div>
+            
             <div style={{flex:'1',width:'100%'}}>
-                <div className="contacto">
-                    <div>
-                    <h1 style={{textAlign:'center',margin:0}}>{idioma=="en"?"CONTACT":"CONTACTO"}</h1>
+                <Card variant="outlined" sx={{maxWidth:'100%',margin:'0 auto',width:'25rem'}}>
+                    <CardHeader sx={{textAlign:'center',fontWeight:'bold'}} title={'CONTACTO'}/>
+                    <CardContent style={{display:'flex',flexDirection:'column',gap:'0.5rem',alignItems:'center'}}>
                     {campos.map((x,i)=>(
                     i!=setsCampos.indexOf(setMensaje)?
-                    <input ref={(el)=>(refs.current[i]=el)} className={error && x.replaceAll(" ","").length==0 && placeholders[i].includes("*")?"error":""} type="text" value={x} placeholder={placeholders[i]} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
-                    :<textarea ref={(el)=>(refs.current[i]=el)} className={error && x.replaceAll(" ","").length==0?"error":""} placeholder={placeholders[i]} value={x} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
+                    <TextField style={{width:'100%'}} inputRef={(el)=>(refs.current[i]=el)} error={error && x.replaceAll(" ","").length==0 && placeholders[i].includes("*")} type="text" value={x} label={placeholders[i]} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
+                    :<TextField style={{width:'100%'}} multiline maxRows={2} inputRef={(el)=>(refs.current[i]=el)} error={error && x.replaceAll(" ","").length==0} label={placeholders[i]} value={x} onChange={(e)=>{setError(false);setsCampos[i](e.target.value)}}/>
                     ))}
+                    <div className="turnstile" style={{width:'100%'}}>
                     <Turnstile
                         size='flexible'
                         style={{width:'100%',boxSizing:'border-box'}}
@@ -125,14 +128,17 @@ export default function({}){
                         language={idioma}
                         onSuccess={(t)=>setToken(t)}
                     />
-                    <a className={`btn ${enviando?'enviando':''}`} style={{width:'fit-content',margin:'0 auto',backgroundColor:'#242629',display:'flex',alignItems:'center',gap:'0.5rem'}} onClick={enviar}>{idioma=="en"?"Send":"Enviar".slice(0,enviando?-1:6)}{enviando?<>{idioma=='en'?'ing':'ndo'}{<ThreeDots width={"20"} height={"10"} color="azure"/>}</>:null}</a>
-                    {error?
-                    <p style={{color:'red',textAlign:'center'}}><b>ERROR</b></p>
-                    :acierto?
-                    <p style={{color:'aqua',textAlign:'center'}}><b>{idioma=="en"?"Email sent successfully":"Correo enviado correctamente"}</b></p>
-                    :null}
                     </div>
-                </div>
+                    </CardContent>
+                    <CardActions sx={{'display':'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
+                        <Button loading={enviando} style={{display:'flex',alignItems:'center',gap:'0.5rem'}} variant="outlined" onClick={enviar}>{idioma=="en"?"Send":"Enviar".slice(0,enviando?-1:6)}{enviando?<>{idioma=='en'?'ing':'ndo'}</>:null}</Button>
+                        {error?
+                        <Alert severity='error'>ERROR</Alert>
+                        :acierto?
+                        <Alert severity='success'>{idioma=="en"?"Email sent successfully":"Correo enviado correctamente"}</Alert>
+                        :null}
+                    </CardActions>
+                </Card>
                 <p style={{marginTop:'1rem',textAlign:'center'}}>{idioma=="en"?"Address: ASINOVA SOLUTIONS, S.L. C/Amio, 114 Costavella Business Center - 15707 - Santiago de Compostela - A Coruña":"Dirección: ASINOVA SOLUCIONES, S.L. C/Amio, 114 CENTRO DE NEGOCIOS COSTAVELLA - 15707 - Santiago de Compostela - A CORUÑA"}</p>
                 <iframe style={{display:'block',width:'100%',margin:'0 auto'}} src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2922.7209941933666!2d-8.511116999999999!3d42.899833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDLCsDUzJzU5LjQiTiA4wrAzMCc0MC4wIlc!5e0!3m2!1ses!2ses!4v1737651598314!5m2!1ses!2ses" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 <p className="aqua" style={{marginTop:'1rem'}}>{idioma=="en"?"LEGAL NOTICE:":"AVISO LEGAL:"}</p>
