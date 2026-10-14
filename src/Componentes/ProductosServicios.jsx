@@ -22,7 +22,7 @@ export default function({subenlaces,subenlaces_en,subpages}){
                 <Tabs
                     orientation="vertical"
                     value={reemplazarAcentos(location.pathname)}
-                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                    sx={{ borderRight: 1, borderColor: 'divider',width:'100%' }}
                 >
                     {subenlaces.map((x,i)=>(
                         <Tab key={i} component={Link} label={x.toUpperCase().replace(' ',' - ')} value={'/productos-y-servicios/'+url(x)} to={'/productos-y-servicios/'+url(x)}/>
