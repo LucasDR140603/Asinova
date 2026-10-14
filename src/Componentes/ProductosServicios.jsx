@@ -12,17 +12,27 @@ import fieldbus from '../Img/Fieldbus.png'
 import piramide from '../Img/Piramide.png'
 import { Link,Routes,Route } from "react-router-dom"
 import NoEncontrado from "./NoEncontrado"
+import {Tabs,Tab} from '@mui/material'
 export default function({subenlaces,subenlaces_en,subpages}){
     const idioma=Cookies.get("idioma")||'es'
     const location=useLocation()
     return <>
         <div className="flex" style={{gap:'2rem'}}>
             <div className="flex visible min1100" style={{flexDirection:'column',alignItems:'start',gap:'1rem'}}>
-                <div className="flex" style={{flexDirection:'column',gap:'1rem',width:'100%'}}>
+                <Tabs
+                    orientation="vertical"
+                    value={reemplazarAcentos(location.pathname)}
+                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                >
+                    {subenlaces.map((x,i)=>(
+                        <Tab key={i} component={Link} label={x.toUpperCase().replace(' ',' - ')} value={'/productos-y-servicios/'+url(x)} to={'/productos-y-servicios/'+url(x)}/>
+                    ))}
+                </Tabs>
+                {/* <div className="flex" style={{flexDirection:'column',gap:'1rem',width:'100%'}}>
                 {subenlaces.map((x,i)=>(
                     <Link style={{boxSizing:'border-box',width:'100%',textAlign:'center',fontWeight:'bold',letterSpacing:'1px'}} className={reemplazarAcentos(location.pathname).includes(url(x))?'marcado':'enlace'} to={'/productos-y-servicios/'+url(x)}>{(idioma=='en'?subenlaces_en[i]:x).replace(' ',' - ')}</Link>
                 ))}
-                </div>
+                </div> */}
                 <a className='aqua' href='https://www.linkedin.com/company/asinova-soluciones?trk=eml-company_page_created-body-view_cp_button&midToken=AQGSTYPgQU6OoA&fromEmail=fromEmail&ut=3f3-xZx1gam7c1'><img src={linkedin}/>{idioma=="en"?"Asinova on LinkedIn":"Asinova en linkedin"}</a>
                 <div style={{minWidth:'100%'}}>
                     <img src={i1} style={{backgroundColor:'white',width:'100%'}}/>

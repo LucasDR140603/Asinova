@@ -473,15 +473,15 @@ input:focus.error{
 
 .lps,.lpshorizontal{
   width: 100%;
-  background-color:#131620;
-  border:1px solid azure;
+  background-color:#121212;
+  border:1px solid #494949;
   box-sizing: border-box;
   position:relative;
-  border-radius: 10px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .lps{
-  box-shadow: 0 0 6px 0px azure;
+  /* box-shadow: 0 0 6px 0px azure; */
   transition: scale 0.125s ease-out;
 }
 .lps>div:first-child{
@@ -497,7 +497,7 @@ input:focus.error{
   padding-top: 0.5rem;
 }
 .lpshorizontal{
-  box-shadow: 0 0 3px 1px azure;
+  /* box-shadow: 0 0 3px 1px azure; */
   transition:scale 0.125s ease-out;
 }
 .lps h2{
