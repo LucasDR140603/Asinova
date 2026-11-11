@@ -84,7 +84,7 @@ function App() {
                 <Link to={'/'+url(x)} className={reemplazarAcentos(location).includes(url(x)) || (i==0 && location.length==0)?'marcado':'enlace'}>{(idioma=="en"?enlaces_en[i]:x).toUpperCase()}</Link>
               ))}
             </div> */}
-            <Tabs className='tabs' value={activeValue} sx={{borderBottom:'1px solid rgba(255,255,255,0.25)'}}>
+            <Tabs className='tabs' value={activeValue}>
               {enlaces.map((x,i)=><Tab key={i} component={Link} label={x.toUpperCase()} value={i==0?'':url(x)} to={i==0?'':url(x)}/>)}
             </Tabs>
             <div className='flex vcenter banderas'>

@@ -166,16 +166,17 @@
   overflow-y: auto;
 }
 .subtitulo{
-  background-image: linear-gradient(90deg,rgb(175, 114, 0),rgb(175, 114, 0),yellow,yellow,yellow,rgb(175, 114, 0),rgb(175, 114, 0));
+  /* background-image: linear-gradient(90deg,rgb(175, 114, 0),rgb(175, 114, 0),yellow,yellow,yellow,rgb(175, 114, 0),rgb(175, 114, 0)); */
   margin:0 auto;
   margin-bottom: 2rem;
   width: fit-content;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* -webkit-text-fill-color: transparent; */
   line-height: 0.8;
   letter-spacing: 1px;
   background-size: 200% auto;
-  animation: move-bg 1.5s linear infinite;
+  color: yellow;
+  /* animation: move-bg 1.5s linear infinite; */
   /* font-size: 100px; */
 }
 

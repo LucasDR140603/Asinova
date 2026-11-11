@@ -11,5 +11,27 @@ const theme=createTheme({
             contrastText:'#000000'
         }
     },
+    components:{
+        MuiTabs:{
+            styleOverrides:{
+                root:{
+                    color:'yellow',
+                    borderBottom:'1px solid rgba(255,255,255,0.25)'
+                },
+                indicator:{
+                    backgroundColor:'yellow'
+                }
+            }
+        },
+        MuiTab:{
+            styleOverrides:{
+                root:{
+                    '&.Mui-selected':{
+                        color:'yellow'
+                    }
+                }
+            }
+        }
+    }
 })
 export default theme;
